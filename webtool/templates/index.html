@@ -27,9 +27,9 @@
                 <table class="pure-table recent-xminds">
                     <thead>
                     <tr>
-                        <th width="60%">NAME</th>
-                        <th width="17%">TIME</th>
-                        <th>ACTIONS</th>
+                        <th width="60%">文件名称</th>
+                        <th width="17%">时间</th>
+                        <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -37,12 +37,12 @@
                         <tr>
                             <td title="{{ record[1] }}"> {{ record[0] }}</td>
                             <td>{{ record[2] }}</td>
-                            <td><a href="{{ url_for('uploaded_file',filename=record[1]) }}">XMIND</a> |
+                            <td><a href="{{ url_for('uploaded_file',filename=record[1]) }}">Xmind</a> |
                                 <a href="{{ url_for('download_zentao_file',filename=record[1]) }}">CSV</a> |
                                 <a href="{{ url_for('download_testlink_file',filename=record[1]) }}">XML</a> |
                                 <a href="{{ url_for('download_excel_file',filename=record[1]) }}">Excel</a> |
-                                <a href="{{ url_for('preview_file',filename=record[1]) }}">PREVIEW</a> |
-                                <a href="{{ url_for('delete_file',filename=record[1], record_id=record[4]) }}">DELETE</a>
+                                <a href="{{ url_for('preview_file',filename=record[1]) }}">预览</a> |
+                                <a href="{{ url_for('delete_file',filename=record[1], record_id=record[4]) }}">删除</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -55,8 +55,9 @@
             {% endif %}
         </div>
         <div class="footer-home">
-            <a href="{{ url_for('static', filename='guide/index.html') }}" target="_blank">User Guide</a> |
-            <a href="https://github.com/zhuifengshen/xmind2testcase/issues/new" target="_blank">Report Issue</a> |
+            <a href="{{ url_for('download_template_file') }}" target="_blank">下载模板</a> |
+            <a href="{{ url_for('static', filename='guide/index.html') }}" target="_blank">用户指南</a> |
+            <a href="https://github.com/zhuifengshen/xmind2testcase/issues/new" target="_blank">反馈问题</a> |
             Powered by <a href="https://github.com/zhuifengshen/xmind2testcase" target="_blank">XMind2TestCase</a>
         </div>
     </div>

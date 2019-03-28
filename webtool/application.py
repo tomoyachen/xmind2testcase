@@ -11,14 +11,21 @@ from werkzeug.contrib.fixers import ProxyFix
 from werkzeug.utils import secure_filename
 import sys
 sys.path.append("..") # 引入上一级目录
+import time
 from xmind2testcase.zentao import xmind_to_zentao_csv_file
 from xmind2testcase.testlink import xmind_to_testlink_xml_file
 from xmind2testcase.excel import xmind_to_excel_csv_file
 from xmind2testcase.utils import get_xmind_testsuites, get_xmind_testcase_list
 from flask import Flask, request, send_from_directory, g, render_template, abort, redirect, url_for
 
+
 here = os.path.abspath(os.path.dirname(__file__))
-log_file = os.path.join(here, 'running.log')
+# log_file = os.path.join(here, 'running.log')
+log_name = time.strftime("%Y%m%d", time.localtime()) + ".log"
+log_dir = here + "\\Log"
+if not exists(log_dir):
+    os.mkdir(log_dir)
+log_file = os.path.join(log_dir, log_name)
 # log handler
 formatter = logging.Formatter('%(asctime)s  %(name)s  %(levelname)s  [%(module)s - %(funcName)s]: %(message)s')
 file_handler = logging.FileHandler(log_file, encoding='UTF-8')
@@ -275,6 +282,12 @@ def download_excel_file(filename):
 
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
 
+@app.route('/download_template_file')
+def download_template_file():
+    if request.method == "GET":
+        if os.path.isfile(os.path.join('../docs', "template.xmind")):
+            return send_from_directory('../docs', "template.xmind", as_attachment=True)
+        abort(404)
 
 @app.route('/preview/<filename>')
 def preview_file(filename):
