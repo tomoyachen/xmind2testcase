@@ -9,8 +9,11 @@ from contextlib import closing
 from os.path import join, exists
 from werkzeug.contrib.fixers import ProxyFix
 from werkzeug.utils import secure_filename
+import sys
+sys.path.append("..") # 引入上一级目录
 from xmind2testcase.zentao import xmind_to_zentao_csv_file
 from xmind2testcase.testlink import xmind_to_testlink_xml_file
+from xmind2testcase.excel import xmind_to_excel_csv_file
 from xmind2testcase.utils import get_xmind_testsuites, get_xmind_testcase_list
 from flask import Flask, request, send_from_directory, g, render_template, abort, redirect, url_for
 
@@ -94,8 +97,9 @@ def delete_record(filename, record_id):
     xmind_file = join(app.config['UPLOAD_FOLDER'], filename)
     testlink_file = join(app.config['UPLOAD_FOLDER'], filename[:-5] + 'xml')
     zentao_file = join(app.config['UPLOAD_FOLDER'], filename[:-5] + 'csv')
+    excel_file = join(app.config['UPLOAD_FOLDER'], filename[:-6] + '_excel.csv')
 
-    for f in [xmind_file, testlink_file, zentao_file]:
+    for f in [xmind_file, testlink_file, zentao_file, excel_file]:
         if exists(f):
             os.remove(f)
 
@@ -117,8 +121,9 @@ def delete_records(keep=20):
         xmind_file = join(app.config['UPLOAD_FOLDER'], name)
         testlink_file = join(app.config['UPLOAD_FOLDER'], name[:-5] + 'xml')
         zentao_file = join(app.config['UPLOAD_FOLDER'], name[:-5] + 'csv')
+        excel_file = join(app.config['UPLOAD_FOLDER'], name[:-6] + '_excel.csv')
 
-        for f in [xmind_file, testlink_file, zentao_file]:
+        for f in [xmind_file, testlink_file, zentao_file, excel_file]:
             if exists(f):
                 os.remove(f)
 
@@ -254,6 +259,19 @@ def download_zentao_file(filename):
 
     zentao_csv_file = xmind_to_zentao_csv_file(full_path)
     filename = os.path.basename(zentao_csv_file) if zentao_csv_file else abort(404)
+
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
+
+
+@app.route('/<filename>/to/excel')
+def download_excel_file(filename):
+    full_path = join(app.config['UPLOAD_FOLDER'], filename)
+
+    if not exists(full_path):
+        abort(404)
+
+    excel_csv_file = xmind_to_excel_csv_file(full_path)
+    filename = os.path.basename(excel_csv_file) if excel_csv_file else abort(404)
 
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
 
