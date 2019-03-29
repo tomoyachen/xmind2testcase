@@ -7,7 +7,32 @@
     <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static',filename='css/pure-min.css') }}">
     <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static',filename='css/custom.css') }}">
 
+    <style>
+        .qztj{
+            display:none;
+        }
+    </style>
 
+    <script>
+    var status = '1';
+    function del(){
+        document.querySelectorAll('.qztj').forEach(function(dom){
+        console.log(status)
+            if(status === '1'){
+                dom.style.display = 'table-cell';
+                document.getElementById("hidden-per-btn").innerHTML = "隐藏前置条件";
+            } else {
+                dom.style.display = 'none';
+                document.getElementById("hidden-per-btn").innerHTML = "显示前置条件";
+            }
+       })
+       if(status === '1'){
+        status = '0'
+       } else{
+        status = '1'
+       }
+    }
+    </script>
 
 </head>
 <body>
@@ -19,6 +44,7 @@
         / <a href="{{ url_for("download_excel_file",filename= name) }}">Excel CSV</a>
         / <a href="{{ url_for("download_iwork_file",filename= name) }}">iWork CSV</a>
         / <a href="{{ url_for("index") }}">返回</a></h2>
+        <span id="hidden-per-btn" onclick="del()">显示前置条件</span>
 
 </div>
 <table class="pure-table tests-table">
@@ -28,7 +54,7 @@
         <th width="10%">模块</th>
         <th>用例标题</th>
         <th width="200px">属性</th>
-        <th>前置条件</th>
+        <th class="qztj">前置条件</th>
         <th width="23%">步骤</th>
     </tr>
     </thead>
@@ -62,7 +88,7 @@
                         </p></div>
                 {% endif %}
 
-            <td >
+            <td class="qztj">
                 <!--前置条件-->
                 {{ test.preconditions | replace('\n','<br>') |safe }}
 
@@ -92,5 +118,6 @@
     <a href="https://github.com/zhuifengshen/xmind2testcase/issues/new" target="_blank">反馈问题</a> |
     Powered by <a href="https://github.com/zhuifengshen/xmind2testcase" target="_blank">XMind2TestCase</a>
 </div>
+
 </body>
 </html>

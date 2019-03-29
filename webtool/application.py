@@ -118,7 +118,7 @@ def delete_record(filename, record_id):
     g.db.commit()
 
 
-def delete_records(keep=20):
+def delete_records(keep=10):
     """Clean up files on server and mark the record as deleted"""
     sql = "SELECT * from records where is_deleted<>1 ORDER BY id desc LIMIT -1 offset {}".format(keep)
     assert isinstance(g.db, sqlite3.Connection)

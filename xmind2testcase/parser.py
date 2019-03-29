@@ -211,7 +211,7 @@ def parse_a_test_step(step_dict):
 
     expected_topics = step_dict.get('topics', [])
     if expected_topics:  # have expected result
-        expected_topic = expected_topics[0]
+        expected_topic = expected_topics[0] #一个步骤对应一个预期结果的元凶
         test_step.expectedresults = expected_topic['title']  # one test step action, one test expected result
         markers = expected_topic['markers']
         test_step.result = get_test_result(markers)
