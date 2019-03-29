@@ -101,7 +101,12 @@
                             <li>{{ step.actions }}
                                 {% if step.expectedresults %}
                                     <ul>
-                                        <li>{{ step.expectedresults }}</li>
+                                        <!--<li>{{ step.expectedresults }}</li>-->
+                                        {% for i in step.expectedresults.split("\r\n") %}
+                                            {% if i != "" %}
+                                            <li>{{  i }}</li>
+                                            {% endif %}
+                                        {% endfor %}
                                     </ul>
                                 {% endif %}
                             </li>

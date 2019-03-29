@@ -204,7 +204,7 @@ def parse_test_steps(step_dict_list):
 
     return steps
 
-
+'''
 def parse_a_test_step(step_dict):
     test_step = TestStep()
     test_step.actions = step_dict['title']
@@ -221,6 +221,31 @@ def parse_a_test_step(step_dict):
 
     logging.debug('finds a teststep: %s', test_step.to_dict())
     return test_step
+'''
+
+
+def parse_a_test_step(step_dict):
+    test_step = TestStep()
+    test_step.actions = step_dict['title']
+
+    expected_topics = step_dict.get('topics', [])
+    if expected_topics:  # have expected result
+        expected_topic = expected_topics[0] #一个步骤对应一个预期结果的元凶
+        # test_step.expectedresults = expected_topic['title']  # one test step action, one test expected result
+        markers = expected_topic['markers']
+        test_step.result = get_test_result(markers)
+
+        #更新预期结果为全部子主题
+        for expected_topic in expected_topics:
+            test_step.expectedresults += expected_topic['title'] + "\r\n"
+
+    else:  # only have test step
+        markers = step_dict['markers']
+        test_step.result = get_test_result(markers)
+
+    logging.debug('finds a teststep: %s', test_step.to_dict())
+    return test_step
+
 
 
 def get_test_result(markers):
