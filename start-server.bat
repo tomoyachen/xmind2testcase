@@ -1,7 +1,6 @@
 @echo off
 
-set path=%path%;%cd%
-
+set path=%cd%;%path%
 cd webtool
 python application.py
 
