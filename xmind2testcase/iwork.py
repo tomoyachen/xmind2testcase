@@ -81,7 +81,7 @@ def gen_a_testcase_row_list(testcase_dict):
             case_title = ""
             case_depict = ""
         else:
-            case_title = case_module + " " + case_title
+            case_title = "[" + case_module + "]" + " " + case_title
 
         #拼接
         if step and expected:
