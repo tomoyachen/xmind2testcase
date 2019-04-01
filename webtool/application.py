@@ -239,7 +239,7 @@ def index(download_xml=None):
     if g.filename:
         return redirect(url_for('preview_file', filename=g.filename))
     else:
-        return render_template('index.html', records=list(get_records()))
+        return render_template('index.html', records=list(get_records()), timestamp=str(int(round(time.time() * 1000))))
 
 
 @app.route('/uploads/<filename>')
@@ -320,7 +320,8 @@ def preview_file(filename):
 
     testcases = get_xmind_testcase_list(full_path)
 
-    return render_template('preview.html', name=filename, suite=testcases, suite_count=suite_count)
+    #页面模板
+    return render_template('preview.html', name=filename, suite=testcases, suite_count=suite_count, timestamp=str(int(round(time.time() * 1000))))
 
 
 @app.route('/delete/<filename>/<int:record_id>')

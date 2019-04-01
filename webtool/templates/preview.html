@@ -39,11 +39,11 @@
 <div class="header">
     <h1>{{ name }} - 预览</h1>
     <h2>用例集: {{ suite_count }} / 测试用例: {{ suite | length }}
-        / <a href="{{ url_for("download_zentao_file",filename= name) }}">禅道 CSV</a>
-        / <a href="{{ url_for("download_testlink_file",filename= name) }}">TestLink XML</a>
-        / <a href="{{ url_for("download_excel_file",filename= name) }}">Excel CSV</a>
-        / <a href="{{ url_for("download_iwork_file",filename= name) }}">iWork CSV</a>
-        / <a href="{{ url_for("index") }}">返回</a></h2>
+        / <a href="{{ url_for('download_zentao_file',filename= name, timestamp= timestamp) }}">禅道 CSV</a>
+        / <a href="{{ url_for('download_testlink_file',filename= name, timestamp= timestamp) }}">TestLink XML</a>
+        / <a href="{{ url_for('download_excel_file',filename= name, timestamp= timestamp) }}">Excel CSV</a>
+        / <a href="{{ url_for('download_iwork_file',filename= name, timestamp= timestamp) }}">iWork CSV</a>
+        / <a href="{{ url_for('index') }}">返回</a></h2>
         <span id="hidden-per-btn" onclick="del()">显示前置条件</span>
 
 </div>
