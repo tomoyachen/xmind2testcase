@@ -29,7 +29,7 @@ def xmind_to_excel_csv_file(xmind_file):
         logging.info('The excel csv file already exists, return it directly: %s', excel_file)
         return excel_file
 
-    with open(excel_file, 'w', newline="") as f:
+    with open(excel_file, 'w', encoding='gbk', newline="") as f:
         writer = csv.writer(f)
         writer.writerows(excel_testcase_rows)
         logging.info('Convert XMind file(%s) to a excel csv file(%s) successfully!', xmind_file, excel_file)

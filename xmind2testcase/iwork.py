@@ -30,7 +30,7 @@ def xmind_to_iwork_csv_file(xmind_file):
         logging.info('The eiwork csv file already exists, return it directly: %s', iwork_file)
         return iwork_file
 
-    with open(iwork_file, 'w', newline="") as f:
+    with open(iwork_file, 'w', encoding='gbk', newline="") as f:
         writer = csv.writer(f)
         writer.writerows(iwork_testcase_rows)
         logging.info('Convert XMind file(%s) to a iwork csv file(%s) successfully!', xmind_file, iwork_file)
