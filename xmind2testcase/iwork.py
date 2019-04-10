@@ -54,6 +54,7 @@ def gen_a_testcase_row(testcase_dict):
 def gen_a_testcase_row_list(testcase_dict):
     case_module = gen_case_module(testcase_dict['suite'])
     case_title = testcase_dict['name']
+
     case_precontion = testcase_dict['preconditions']
     case_step_and_expected_result_dict = gen_case_step_and_expected_result_dict(testcase_dict['steps'])
     # print("case_step_and_expected_result_dict >> ", case_step_and_expected_result_dict)
@@ -75,6 +76,11 @@ def gen_a_testcase_row_list(testcase_dict):
     row_list = []
     row = ""
     row_index = 1
+    if not case_step_and_expected_result_dict:
+        row = [case_title, case_depict, "", "", ""]
+        row_list.append(row)
+        return row_list
+    # print("aaa", case_step_and_expected_result_dict.items())
     for step, expected in case_step_and_expected_result_dict.items():
         # 是否首行
         if row_index > 1:
