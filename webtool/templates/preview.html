@@ -44,9 +44,8 @@
         / <a href="{{ url_for('download_excel_file',filename= name, timestamp= timestamp) }}">Excel CSV</a>
         / <a href="{{ url_for('download_iwork_file',filename= name, timestamp= timestamp) }}">iWork CSV</a>
         / <a href="{{ url_for('index') }}">返回</a></h2>
-        <span style="color:red; font-size:12px; display:block; float:middle ">如果步骤为空的话，请确保XMind文件中<b><u>用例名称</u></b>已加上了<b><u>优先级</u></b>！</span>
-        <span id="hidden-per-btn" onclick="del()" style="font-size:12px; float:right; clear:both">[显示前置条件]</span>
-
+        <span style="color:red; font-size:14px; display:block; float:none;">如果步骤为空的话，请确保XMind文件中<b><u>用例名称</u></b>已加上了<b><u>优先级</u></b>！</span>
+        <span id="hidden-per-btn" onclick="del()" style="font-size:12px; display:block; float:right; clear:both">[显示前置条件]</span>
 </div>
 <table class="pure-table tests-table">
     <thead>
