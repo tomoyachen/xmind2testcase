@@ -90,10 +90,24 @@
                 {% endif %}
             </td>
             <td>
+
+                <!--原优先级-->
                 <div class="tag-success tooltip">
                     优先级 {{ test.importance }}
                     <span class="tooltiptext">优先级 {{ test.importance }} </span>
                 </div>
+
+                <!--区分颜色的优先级-->
+                <!--
+                <div class="tag-success tooltip"
+                     {% if test.importance == 1 %} style="background: #ca3c3c;"
+                     {% elif test.importance == 2 %} style="background: #FFD700;"
+                     {% elif test.importance == 3 %} style="background: #6495ED;"
+                     {% endif %}>
+                优先级 {{ test.importance }}
+                    <span class="tooltiptext">优先级 {{ test.importance }} </span>
+                </div>
+                -->
                 {% if test.preconditions %}
                     <div class="pure-button tag-info tooltip">前置条件
                         <p class="tooltiptext">
