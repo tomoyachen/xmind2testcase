@@ -14,7 +14,7 @@ sys.path.append("..") # 引入上一级目录
 import time
 from xmind2testcase.zentao import xmind_to_zentao_csv_file
 from xmind2testcase.testlink import xmind_to_testlink_xml_file
-from xmind2testcase.excel import xmind_to_excel_csv_file
+from xmind2testcase.excel import xmind_to_excel_file
 from xmind2testcase.iwork import xmind_to_iwork_csv_file
 from xmind2testcase.iwork_excel import xmind_to_iwork_excel_file
 from xmind2testcase.utils import get_xmind_testsuites, get_xmind_testcase_list
@@ -106,9 +106,9 @@ def delete_record(filename, record_id):
     xmind_file = join(app.config['UPLOAD_FOLDER'], filename)
     testlink_file = join(app.config['UPLOAD_FOLDER'], filename[:-5] + 'xml')
     zentao_file = join(app.config['UPLOAD_FOLDER'], filename[:-5] + 'csv')
-    excel_file = join(app.config['UPLOAD_FOLDER'], filename[:-6] + '_excel.csv')
+    excel_file = join(app.config['UPLOAD_FOLDER'], filename[:-5] + 'xls')
     iwork_file = join(app.config['UPLOAD_FOLDER'], filename[:-6] + '_iwork.csv')
-    iwork_excel_file = join(app.config['UPLOAD_FOLDER'], filename[:-6] + '_iwork.xls')
+    iwork_excel_file = join(app.config['UPLOAD_FOLDER'], filename[:-6] + '_iwork.xlsx')
 
     for f in [xmind_file, testlink_file, zentao_file, excel_file, iwork_file, iwork_excel_file]:
         if exists(f):
@@ -132,9 +132,9 @@ def delete_records(keep=10):
         xmind_file = join(app.config['UPLOAD_FOLDER'], name)
         testlink_file = join(app.config['UPLOAD_FOLDER'], name[:-5] + 'xml')
         zentao_file = join(app.config['UPLOAD_FOLDER'], name[:-5] + 'csv')
-        excel_file = join(app.config['UPLOAD_FOLDER'], name[:-6] + '_excel.csv')
+        excel_file = join(app.config['UPLOAD_FOLDER'], name[:-5] + 'xls')
         iwork_file = join(app.config['UPLOAD_FOLDER'], name[:-6] + '_iwork.csv')
-        iwork_excel_file = join(app.config['UPLOAD_FOLDER'], name[:-6] + '_iwork.xls')
+        iwork_excel_file = join(app.config['UPLOAD_FOLDER'], name[:-6] + '_iwork.xlsx')
 
         for f in [xmind_file, testlink_file, zentao_file, excel_file, iwork_file, iwork_excel_file]:
             if exists(f):
@@ -283,8 +283,8 @@ def download_excel_file(filename):
     if not exists(full_path):
         abort(404)
 
-    excel_csv_file = xmind_to_excel_csv_file(full_path)
-    filename = os.path.basename(excel_csv_file) if excel_csv_file else abort(404)
+    excel_file = xmind_to_excel_file(full_path)
+    filename = os.path.basename(excel_file) if excel_file else abort(404)
 
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
 
@@ -356,7 +356,7 @@ def app_error(e):
     return str(e)
 
 
-def launch(host='127.0.0.1', debug=True, port=5001):
+def launch(host='0.0.0.0', debug=True, port=5001):
     app.run(host=host, debug=debug, port=port)
 
 

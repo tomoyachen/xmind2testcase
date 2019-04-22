@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # _*_ coding:utf-8 _*_
-import csv
+import xlwt
 import logging
 import os
 from xmind2testcase.utils import get_xmind_testcase_list, get_absolute_path
@@ -12,27 +12,48 @@ Zentao official document about import CSV testcase file: https://www.zentao.net/
 """
 
 
-def xmind_to_excel_csv_file(xmind_file):
+def xmind_to_excel_file(xmind_file):
     """Convert XMind file to a excel csv file"""
     xmind_file = get_absolute_path(xmind_file)
     logging.info('Start converting XMind file(%s) to excel file...', xmind_file)
     testcases = get_xmind_testcase_list(xmind_file)
 
     fileheader = ["所属模块", "用例标题", "前置条件", "步骤", "预期", "关键词", "优先级", "用例类型", "适用阶段"]
-    excel_testcase_rows = [fileheader]
-    for testcase in testcases:
-        row = gen_a_testcase_row(testcase)
-        excel_testcase_rows.append(row)
 
-    excel_file = xmind_file[:-6] + '_excel' + '.csv'
+
+    wbk = xlwt.Workbook()
+    sheet1 = wbk.add_sheet('测试用例', cell_overwrite_ok=False)
+
+    # 自动换行
+    style1 = xlwt.easyxf('align: wrap on, vert top')
+    sheet1.col(0).width = 256*30
+    sheet1.col(1).width = 256*40
+    sheet1.col(2).width = 256*30
+    sheet1.col(3).width = 256*40
+    sheet1.col(4).width = 256*40
+
+    # 用例title
+    for i in range(0, len(fileheader)):
+        sheet1.write(0, i, fileheader[i])
+
+    #第二行开始写入用例
+    case_index = 1
+    for testcase in testcases:
+        # row = gen_a_testcase_row(testcase)
+        row = gen_a_testcase_row(testcase)
+        # print("row_list >> ", row_list)
+        for i in range(0,len(row)):
+            sheet1.write(case_index, i, row[i], style1)
+        case_index = case_index + 1
+
+    excel_file = xmind_file[:-5] + 'xls'
     if os.path.exists(excel_file):
-        logging.info('The excel csv file already exists, return it directly: %s', excel_file)
+        logging.info('The excel file already exists, return it directly: %s', excel_file)
         return excel_file
 
-    with open(excel_file, 'w', encoding='gb18030', newline="") as f:
-        writer = csv.writer(f)
-        writer.writerows(excel_testcase_rows)
-        logging.info('Convert XMind file(%s) to a excel csv file(%s) successfully!', xmind_file, excel_file)
+    if excel_file:
+        wbk.save(excel_file)
+        logging.info('Convert XMind file(%s) to a iwork excel file(%s) successfully!', xmind_file, excel_file)
 
     return excel_file
 
@@ -90,5 +111,5 @@ def gen_case_type(case_type):
 
 if __name__ == '__main__':
     xmind_file = '../docs/zentao_testcase_template.xmind'
-    excel_csv_file = xmind_to_excel_csv_file(xmind_file)
-    print('Conver the xmind file to a excel csv file succssfully: %s', excel_csv_file)
+    excel_file = xmind_to_excel_file(xmind_file)
+    print('Conver the xmind file to a excel csv file succssfully: %s', excel_file)

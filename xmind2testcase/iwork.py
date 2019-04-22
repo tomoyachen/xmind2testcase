@@ -128,7 +128,7 @@ def gen_case_step_and_expected_result(steps):
 def gen_case_step_and_expected_result_dict(steps):
     total_dict = {}
     for step_dict in steps:
-        print(step_dict)
+        # print(step_dict)
         # total_dict[step_dict['actions'].replace('\n', '').strip()] = step_dict['expectedresults'].replace('\n', '').strip()
         # 因为更换成预期结果也有值所以用下面的语句
         total_dict[step_dict['actions'].replace('\n', '').strip()] = step_dict['expectedresults'].strip()
