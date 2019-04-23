@@ -59,8 +59,8 @@
         / <a href="{{ url_for('download_zentao_file',filename= name, timestamp= timestamp) }}">禅道 CSV</a>
         / <a href="{{ url_for('download_testlink_file',filename= name, timestamp= timestamp) }}">TestLink XML</a>
         / <a href="{{ url_for('download_excel_file',filename= name, timestamp= timestamp) }}">Excel</a>
-        / <a href="{{ url_for('download_iwork_file',filename= name, timestamp= timestamp) }}">iWork CSV</a>
-        / <a href="{{ url_for('download_iwork_excel_file',filename= name, timestamp= timestamp) }}">iWork Excel</a>
+        <!--/ <a href="{{ url_for('download_iwork_file',filename= name, timestamp= timestamp) }}">iWork CSV</a>-->
+        / <a href="{{ url_for('download_iwork_excel_file',filename= name, timestamp= timestamp) }}">iWork</a>
         / <a href="{{ url_for('index') }}">返回</a></h2>
         <!--<span style="color:red; font-size:14px; display:block; float:none;">如果步骤为空的话，请确保XMind文件中<b><u>用例名称</u></b>已加上了<b><u>优先级</u></b>！</span>-->
         <div id="Layer1" style="display: none; position: absolute; z-index: 100;">
@@ -155,8 +155,10 @@
     </tbody>
 </table>
 <div class="footer">
+    <a href="{{ url_for('download_template_file') }}" target="_blank">下载模板</a> |
     <a href="{{ url_for('static', filename='guide/index.html') }}" target="_blank">用户指南</a> |
-    <a href="https://github.com/zhuifengshen/xmind2testcase/issues/new" target="_blank">反馈问题</a> |
+    <!--<a href="https://github.com/zhuifengshen/xmind2testcase/issues/new" target="_blank">反馈问题</a> |-->
+    <a href="mailto:tomoya_chen@163.com?subject=XMind2TestCase反馈问题&body=" target="_blank">反馈问题</a> |
     Powered by <a href="https://github.com/zhuifengshen/xmind2testcase" target="_blank">XMind2TestCase</a>
 </div>
 
