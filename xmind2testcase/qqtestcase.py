@@ -49,6 +49,7 @@ def xmind_to_qqtestcase_file(xmind_file):
     sheet2.write(0, 2, fileheader[2])
     sheet2.write(0, 3, fileheader[3])
     sheet2.write(0, 4, fileheader[4])
+    sheet2.write(0, 4, fileheader[5])
 
     #第二行开始写入用例
     case_index = 1
