@@ -132,7 +132,7 @@ def gen_a_testcase_row_list(testcase_dict):
 
         #拼接
         if step and expected:
-            row = [case_module, case_title, case_precontion, step, expected]
+            row = [case_module, case_title, case_precontion, step, expected] #预期结果一对多来自parser.py文件
         elif step:
             row = [case_module, case_title, case_precontion, step, ""]
         else:

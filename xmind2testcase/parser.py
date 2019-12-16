@@ -237,7 +237,8 @@ def parse_a_test_step(step_dict):
 
         #更新预期结果为全部子主题
         for expected_topic in expected_topics:
-            test_step.expectedresults += expected_topic['title'] + "\r\n"
+            test_step.expectedresults += expected_topic['title'] + "\n"
+            # test_step.expectedresults += expected_topic['title'] + "\r\n"
 
     else:  # only have test step
         markers = step_dict['markers']
