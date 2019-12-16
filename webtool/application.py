@@ -17,6 +17,7 @@ from xmind2testcase.testlink import xmind_to_testlink_xml_file
 from xmind2testcase.excel import xmind_to_excel_file
 from xmind2testcase.iwork import xmind_to_iwork_csv_file
 from xmind2testcase.iwork_excel import xmind_to_iwork_excel_file
+from xmind2testcase.qqtestcase import xmind_to_qqtestcase_file
 from xmind2testcase.utils import get_xmind_testsuites, get_xmind_testcase_list
 from flask import Flask, request, send_from_directory, g, render_template, abort, redirect, url_for
 
@@ -109,8 +110,9 @@ def delete_record(filename, record_id):
     excel_file = join(app.config['UPLOAD_FOLDER'], filename[:-5] + 'xls')
     iwork_file = join(app.config['UPLOAD_FOLDER'], filename[:-6] + '_iwork.csv')
     iwork_excel_file = join(app.config['UPLOAD_FOLDER'], filename[:-6] + '_iwork.xlsx')
+    qqtestcase_file = join(app.config['UPLOAD_FOLDER'], filename[:-6] + '_qq.xlsx')
 
-    for f in [xmind_file, testlink_file, zentao_file, excel_file, iwork_file, iwork_excel_file]:
+    for f in [xmind_file, testlink_file, zentao_file, excel_file, iwork_file, iwork_excel_file, qqtestcase_file]:
         if exists(f):
             os.remove(f)
 
@@ -135,8 +137,9 @@ def delete_records(keep=10):
         excel_file = join(app.config['UPLOAD_FOLDER'], name[:-5] + 'xls')
         iwork_file = join(app.config['UPLOAD_FOLDER'], name[:-6] + '_iwork.csv')
         iwork_excel_file = join(app.config['UPLOAD_FOLDER'], name[:-6] + '_iwork.xlsx')
+        qqtestcase_file = join(app.config['UPLOAD_FOLDER'], name[:-6] + '_qq.xlsx')
 
-        for f in [xmind_file, testlink_file, zentao_file, excel_file, iwork_file, iwork_excel_file]:
+        for f in [xmind_file, testlink_file, zentao_file, excel_file, iwork_file, iwork_excel_file, qqtestcase_file]:
             if exists(f):
                 os.remove(f)
 
@@ -314,6 +317,19 @@ def download_iwork_excel_file(filename):
 
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
 
+@app.route('/<filename>/to/qqtestcase')
+def download_qqtestcase_file(filename):
+    full_path = join(app.config['UPLOAD_FOLDER'], filename)
+
+    if not exists(full_path):
+        abort(404)
+
+    qqtestcase_file = xmind_to_qqtestcase_file(full_path)
+    filename = os.path.basename(qqtestcase_file) if qqtestcase_file else abort(404)
+
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
+
+
 
 @app.route('/download_template_file')
 def download_template_file():
@@ -364,4 +380,5 @@ init()  # initializing the database
 
 
 if __name__ == '__main__':
-    app.run(HOST, debug=DEBUG, port=5001)
+    # app.run(HOST, debug=DEBUG, port=5001)
+    app.run(host="0.0.0.0", port=5001)

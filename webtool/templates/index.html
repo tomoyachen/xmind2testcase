@@ -43,6 +43,7 @@
                                 <a href="{{ url_for('download_excel_file',filename=record[1], timestamp= timestamp) }}">Excel</a> |
                                 <!--<a href="{{ url_for('download_iwork_file',filename=record[1], timestamp= timestamp) }}">iWork</a> |-->
                                 <a href="{{ url_for('download_iwork_excel_file',filename=record[1], timestamp= timestamp) }}">iWork</a> |
+                                <a href="{{ url_for('download_qqtestcase_file',filename=record[1], timestamp= timestamp) }}">QQ Testcase</a> |
                                 <a href="{{ url_for('preview_file',filename=record[1]) }}">预览</a> |
                                 <a href="{{ url_for('delete_file',filename=record[1], record_id=record[4]) }}">删除</a>
                             </td>
