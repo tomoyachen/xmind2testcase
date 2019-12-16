@@ -18,7 +18,7 @@ def xmind_to_qqtestcase_file(xmind_file):
     logging.info('Start converting XMind file(%s) to qqtestcase file...', xmind_file)
     testcases = get_xmind_testcase_list(xmind_file)
 
-    fileheader = ["功能模块", "测试点", "前置条件", "操作步骤", "预期结果"]
+    fileheader = ["编号", "功能模块", "测试点", "前置条件", "操作步骤", "预期结果"]
 
     qqtestcase_file = xmind_file[:-6] + '_qq' + '.xlsx'
 
@@ -40,7 +40,7 @@ def xmind_to_qqtestcase_file(xmind_file):
     # sheet1.write(1, 0, '确认数量正确、内容正确后，可将此文件直接导入iWork系统', style1)  # 第1行第0列写入内容
 
     sheet2 = workbook.add_worksheet('测试用例')
-    sheet2.set_column("A:E", 30)
+    sheet2.set_column("A:F", 30)
 
 
     # 用例title
@@ -52,19 +52,21 @@ def xmind_to_qqtestcase_file(xmind_file):
 
     #第二行开始写入用例
     case_index = 1
+    case_no = 0
     for testcase in testcases:
-        # row = gen_a_testcase_row(testcase)
         row_list = gen_a_testcase_row_list(testcase)
-        # print("row_list >> ", row_list)
         for row in row_list:
-            # for i in range(0,len(row)):
-            #     sheet2.write(case_index, i, row[i])
-            sheet2.write(case_index, 0, row[0], style2)
-            sheet2.write(case_index, 1, row[1], style2)
-            sheet2.write(case_index, 2, row[2], style2)
-            sheet2.write(case_index, 3, row[3], style2)
-            sheet2.write(case_index, 4, row[4], style2)
-            # sheet2.set_row(case_index, len(row_list)*10)
+            if len(row[1]) > 0:
+                case_no += 1
+                sheet2.write(case_index, 0, "No." + str(case_no), style2)
+            else:
+                sheet2.write(case_index, 0, "", style2)
+
+            sheet2.write(case_index, 1, row[0], style2)
+            sheet2.write(case_index, 2, row[1], style2)
+            sheet2.write(case_index, 3, row[2], style2)
+            sheet2.write(case_index, 4, row[3], style2)
+            sheet2.write(case_index, 5, row[4], style2)
             case_index = case_index + 1
 
 
