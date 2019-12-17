@@ -65,7 +65,9 @@ def xmind_to_qqtestcase_file(xmind_file):
             #####################
             smoke_case = {}
             if row_dict["case_priority"] == "高":
+                smoke_case["module"] = row_dict["case_module"]
                 smoke_case["name"] = row_dict["case_title"]
+                smoke_case["precontion"] = row_dict["case_precontion"]
                 smoke_case["case"] = []
 
             ##########################
@@ -90,7 +92,7 @@ def xmind_to_qqtestcase_file(xmind_file):
 
             if len(smoke_case) > 0:
                 smoke_case_dict[product].append(smoke_case)
-    # print(smoke_case_dict)
+    print(smoke_case_dict)
 
     #写入冒烟测试
     #############
@@ -112,8 +114,12 @@ def xmind_to_qqtestcase_file(xmind_file):
                 for _smoke_case in _smoke_case_list:
                     _smoke_case_string = "测试点：\n"
                     _smoke_case_string += _smoke_case["name"] + "\n\n"
-                    _step_index = 0
                     # print("_smoke_case", _smoke_case)
+                    #前置条件
+                    if len(_smoke_case["precontion"]) > 0 and _smoke_case["precontion"] != '无':
+                        _smoke_case_string += "前置条件：\n"
+                        _smoke_case_string += _smoke_case["precontion"] + "\n\n"
+                    _step_index = 0
                     for _step in _smoke_case["case"]:
                         if len(_step[0]) > 0 and len(_step[1]):
                             _step_index += 1
