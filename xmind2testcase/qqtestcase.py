@@ -37,46 +37,111 @@ def xmind_to_qqtestcase_file(xmind_file):
     # sheet1.write(0, 0, '测试用例内容请至第二页查看')  # 第0行第0列写入内容
     # sheet1.write(1, 0, '确认数量正确、内容正确后，可将此文件直接导入iWork系统', style1)  # 第1行第0列写入内容
 
+    smoke_case_dict = {}
     for product in testsutie_dict:
 
-        sheet2 = workbook.add_worksheet(product) #sheet名
-        sheet2.set_column("A:F", 30)
+        smoke_case_dict[product] = []
+
+        sheet = workbook.add_worksheet(product) #sheet名
+        sheet.set_column("A:B", 20)
+        sheet.set_column("C:F", 30)
 
         # 用例title
-        sheet2.write(0, 0, fileheader[0])
-        sheet2.write(0, 1, fileheader[1])
-        sheet2.write(0, 2, fileheader[2])
-        sheet2.write(0, 3, fileheader[3])
-        sheet2.write(0, 4, fileheader[4])
-        sheet2.write(0, 5, fileheader[5])
+        sheet.write(0, 0, fileheader[0])
+        sheet.write(0, 1, fileheader[1])
+        sheet.write(0, 2, fileheader[2])
+        sheet.write(0, 3, fileheader[3])
+        sheet.write(0, 4, fileheader[4])
+        sheet.write(0, 5, fileheader[5])
 
         #第二行开始写入用例
         case_index = 1
         case_no = 0
         for testcase in testsutie_dict[product]:
-            row_list = gen_a_testcase_row_list(testcase)
+            row_dict = gen_a_testcase_row_dict(testcase) #包含用例信息
+            row_list = row_dict["case_row_list"] #取用例列
+            # print("row_dict", row_dict)
+
+            #####################
+            smoke_case = {}
+            if row_dict["case_priority"] == "高":
+                smoke_case["name"] = row_dict["case_title"]
+                smoke_case["case"] = []
+
+            ##########################
+
             for row in row_list:
                 if len(row[1]) > 0:
                     case_no += 1
-                    sheet2.write(case_index, 0, "No." + str(case_no), style_text_wrap)
+                    sheet.write(case_index, 0, "No." + str(case_no), style_text_wrap)
                 else:
-                    sheet2.write(case_index, 0, "", style_text_wrap)
+                    sheet.write(case_index, 0, "", style_text_wrap)
 
-                sheet2.write(case_index, 1, row[0], style_text_wrap)
-                sheet2.write(case_index, 2, row[1], style_text_wrap)
-                sheet2.write(case_index, 3, row[2], style_text_wrap)
-                sheet2.write(case_index, 4, row[3], style_text_wrap)
-                sheet2.write(case_index, 5, row[4], style_text_wrap)
+                sheet.write(case_index, 1, row[0], style_text_wrap)
+                sheet.write(case_index, 2, row[1], style_text_wrap)
+                sheet.write(case_index, 3, row[2], style_text_wrap)
+                sheet.write(case_index, 4, row[3], style_text_wrap)
+                sheet.write(case_index, 5, row[4], style_text_wrap)
                 case_index = case_index + 1
 
+                #给用例加操作步骤 预期结果
+                if len(smoke_case) > 0:
+                    smoke_case["case"].append([row[3], row[4]])
 
+            if len(smoke_case) > 0:
+                smoke_case_dict[product].append(smoke_case)
+    # print(smoke_case_dict)
+
+    #写入冒烟测试
+    #############
+    if len(smoke_case_dict) > 0:
+        sheet2 = workbook.add_worksheet("冒烟用例")  # sheet名
+        sheet2.set_column("A:A", 20)
+        sheet2.set_column("B:B", 80)
+
+        _case_index = 0
+        #分解sheet
+        for product in smoke_case_dict:
+            if len(smoke_case_dict[product]) > 0:
+                # 用例title
+                sheet2.write(_case_index, 0, "编号", style_text_wrap)
+                sheet2.write(_case_index, 1, "%s 冒烟用例" % product, style_text_wrap)
+                _case_index += 1
+                _smoke_case_list = smoke_case_dict[product]
+                _case_no = 0
+                for _smoke_case in _smoke_case_list:
+                    _smoke_case_string = "测试点：\n"
+                    _smoke_case_string += _smoke_case["name"] + "\n\n"
+                    _step_index = 0
+                    # print("_smoke_case", _smoke_case)
+                    for _step in _smoke_case["case"]:
+                        if len(_step[0]) > 0 and len(_step[1]):
+                            _step_index += 1
+                            _smoke_case_string += "操作步骤" + str(_step_index) + "：\n"
+                            _smoke_case_string += _step[0] + "\n\n"
+                            _smoke_case_string += "预期结果" + str(_step_index) + "：\n"
+                            _smoke_case_string += _step[1] + "\n\n"
+                        elif len(_step[0]) > 0:
+                            _step_index += 1
+                            _smoke_case_string += "操作步骤" + str(_step_index) + "：\n"
+                            _smoke_case_string += _step[0] + "\n\n"
+
+                    # print(_smoke_case_string)
+                    _case_no += 1
+                    sheet2.write(_case_index, 0, "No." + str(_case_no), style_text_wrap)
+                    sheet2.write(_case_index, 1, _smoke_case_string, style_text_wrap)
+                    _case_index += 1
+                _case_index += 1
+
+
+    ###################
     workbook.close()
     logging.info('Convert XMind file(%s) to a qqtestcase file(%s) successfully!', xmind_file, qqtestcase_file)
 
     return qqtestcase_file
 
 #qqtestcase
-def gen_a_testcase_row_list(testcase_dict):
+def gen_a_testcase_row_dict(testcase_dict):
     case_module = gen_case_module(testcase_dict['suite'])
     case_title = testcase_dict['name']
 
@@ -97,6 +162,16 @@ def gen_a_testcase_row_list(testcase_dict):
     case_depict += "用例类型: " + case_type + "\n"
     case_depict += "适用阶段: " + case_apply_phase + "\n"
 
+    #用例信息
+    row_list_dict = {
+        "case_module": case_module,
+        "case_title": case_title,
+        "case_precontion": case_precontion,
+        "case_priority": case_priority,
+        "case_row_list": []
+
+    }
+
     # 列内容
     row_list = []
     row = ""
@@ -104,31 +179,31 @@ def gen_a_testcase_row_list(testcase_dict):
     if not case_step_and_expected_result_dict:
         row = [case_module, case_title, case_precontion, "", ""]
         row_list.append(row)
-        return row_list
     # print("aaa", case_step_and_expected_result_dict.items())
-    for step, expected in case_step_and_expected_result_dict.items():
-        # 是否首行
-        if row_index > 1:
-            case_module = ""
-            case_title = ""
-            case_depict = ""
-            case_precontion = ""
-        else:
-            pass
-            # case_title = "[" + case_module + "]" + " " + case_title
+    else:
+        for step, expected in case_step_and_expected_result_dict.items():
+            # 是否首行
+            if row_index > 1:
+                case_module = ""
+                case_title = ""
+                case_depict = ""
+                case_precontion = ""
+            else:
+                pass
+                # case_title = "[" + case_module + "]" + " " + case_title
 
-        #拼接
-        if step and expected:
-            row = [case_module, case_title, case_precontion, step, expected] #预期结果一对多来自parser.py文件
-        elif step:
-            row = [case_module, case_title, case_precontion, step, ""]
-        else:
-            row = [case_module, case_title, case_precontion, "", ""]
-        row_list.append(row)
-        row_index = row_index + 1
+            #拼接
+            if step and expected:
+                row = [case_module, case_title, case_precontion, step, expected] #预期结果一对多来自parser.py文件
+            elif step:
+                row = [case_module, case_title, case_precontion, step, ""]
+            else:
+                row = [case_module, case_title, case_precontion, "", ""]
+            row_list.append(row)
+            row_index = row_index + 1
 
-    # print("row_list by function >>", row_list)
-    return row_list
+    row_list_dict["case_row_list"].extend(row_list)
+    return row_list_dict
 
 
 def gen_case_module(module_name):
