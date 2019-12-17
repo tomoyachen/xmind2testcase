@@ -96,10 +96,35 @@ def get_xmind_testcase_list(xmind_file):
                 case_data['product'] = product
                 case_data['suite'] = suite.name
                 testcases.append(case_data)
+        print(suite.testcase_list[0].to_dict())
 
     logging.info('Convert XMind file(%s) to testcases dict data successfully!', xmind_file)
     return testcases
 
+def get_xmind_testcase_list2(xmind_file):
+    """Load the XMind file and get all testcase in it
+
+    :param xmind_file: the target XMind file
+    :return: a list of testcase data
+    """
+    xmind_file = get_absolute_path(xmind_file)
+    logging.info('Start converting XMind file(%s) to testcases dict data...', xmind_file)
+    testsuites = get_xmind_testsuites(xmind_file)
+
+    testcases_dict = {}
+    for testsuite in testsuites:
+        product = testsuite.name
+        testcases_dict[product] = []
+        for suite in testsuite.sub_suites:
+            for case in suite.testcase_list:
+                case_data = case.to_dict()
+                case_data['product'] = product
+                case_data['suite'] = suite.name
+                testcases_dict[product].append(case_data)
+
+    logging.info('Convert XMind file(%s) to testcases dict data successfully!', xmind_file)
+    print(testcases_dict)
+    return testcases_dict
 
 def xmind_testsuite_to_json_file(xmind_file):
     """Convert XMind file to a testsuite json file"""

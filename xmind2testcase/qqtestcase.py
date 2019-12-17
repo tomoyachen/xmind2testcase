@@ -4,7 +4,7 @@
 import xlsxwriter
 import logging
 import os
-from xmind2testcase.utils import get_xmind_testcase_list, get_absolute_path
+from xmind2testcase.utils import get_xmind_testcase_list2, get_absolute_path
 
 
 """
@@ -16,7 +16,9 @@ def xmind_to_qqtestcase_file(xmind_file):
     """Convert XMind file to a qqtestcase file"""
     xmind_file = get_absolute_path(xmind_file)
     logging.info('Start converting XMind file(%s) to qqtestcase file...', xmind_file)
-    testcases = get_xmind_testcase_list(xmind_file)
+    testcases_dict = get_xmind_testcase_list2(xmind_file)
+
+
 
     fileheader = ["编号", "功能模块", "测试点", "前置条件", "操作步骤", "预期结果"]
 
@@ -26,49 +28,46 @@ def xmind_to_qqtestcase_file(xmind_file):
         logging.info('The qqtestcase file already exists, return it directly: %s', qqtestcase_file)
         return qqtestcase_file
 
-
     workbook = xlsxwriter.Workbook(qqtestcase_file)
 
-    # 红色字体
-    style1 = workbook.add_format({'font_color':'#FF0000'})
-
     # 自动换行
-    style2 = workbook.add_format({'text_wrap': 1, 'valign':'top'})
+    style_text_wrap = workbook.add_format({'text_wrap': 1, 'valign':'top'})
     #
     # sheet1 = workbook.add_worksheet('README')
     # sheet1.write(0, 0, '测试用例内容请至第二页查看')  # 第0行第0列写入内容
     # sheet1.write(1, 0, '确认数量正确、内容正确后，可将此文件直接导入iWork系统', style1)  # 第1行第0列写入内容
 
-    sheet2 = workbook.add_worksheet('测试用例')
-    sheet2.set_column("A:F", 30)
+    for product in testcases_dict:
 
+        sheet2 = workbook.add_worksheet(product) #sheet名
+        sheet2.set_column("A:F", 30)
 
-    # 用例title
-    sheet2.write(0, 0, fileheader[0])
-    sheet2.write(0, 1, fileheader[1])
-    sheet2.write(0, 2, fileheader[2])
-    sheet2.write(0, 3, fileheader[3])
-    sheet2.write(0, 4, fileheader[4])
-    sheet2.write(0, 4, fileheader[5])
+        # 用例title
+        sheet2.write(0, 0, fileheader[0])
+        sheet2.write(0, 1, fileheader[1])
+        sheet2.write(0, 2, fileheader[2])
+        sheet2.write(0, 3, fileheader[3])
+        sheet2.write(0, 4, fileheader[4])
+        sheet2.write(0, 4, fileheader[5])
 
-    #第二行开始写入用例
-    case_index = 1
-    case_no = 0
-    for testcase in testcases:
-        row_list = gen_a_testcase_row_list(testcase)
-        for row in row_list:
-            if len(row[1]) > 0:
-                case_no += 1
-                sheet2.write(case_index, 0, "No." + str(case_no), style2)
-            else:
-                sheet2.write(case_index, 0, "", style2)
+        #第二行开始写入用例
+        case_index = 1
+        case_no = 0
+        for testcase in testcases_dict[product]:
+            row_list = gen_a_testcase_row_list(testcase)
+            for row in row_list:
+                if len(row[1]) > 0:
+                    case_no += 1
+                    sheet2.write(case_index, 0, "No." + str(case_no), style_text_wrap)
+                else:
+                    sheet2.write(case_index, 0, "", style_text_wrap)
 
-            sheet2.write(case_index, 1, row[0], style2)
-            sheet2.write(case_index, 2, row[1], style2)
-            sheet2.write(case_index, 3, row[2], style2)
-            sheet2.write(case_index, 4, row[3], style2)
-            sheet2.write(case_index, 5, row[4], style2)
-            case_index = case_index + 1
+                sheet2.write(case_index, 1, row[0], style_text_wrap)
+                sheet2.write(case_index, 2, row[1], style_text_wrap)
+                sheet2.write(case_index, 3, row[2], style_text_wrap)
+                sheet2.write(case_index, 4, row[3], style_text_wrap)
+                sheet2.write(case_index, 5, row[4], style_text_wrap)
+                case_index = case_index + 1
 
 
     workbook.close()
