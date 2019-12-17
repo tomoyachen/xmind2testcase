@@ -16,7 +16,7 @@ def xmind_to_qqtestcase_file(xmind_file):
     """Convert XMind file to a qqtestcase file"""
     xmind_file = get_absolute_path(xmind_file)
     logging.info('Start converting XMind file(%s) to qqtestcase file...', xmind_file)
-    testcases_dict = get_xmind_testcase_list2(xmind_file)
+    testsutie_dict = get_xmind_testcase_list2(xmind_file)
 
 
 
@@ -37,7 +37,7 @@ def xmind_to_qqtestcase_file(xmind_file):
     # sheet1.write(0, 0, '测试用例内容请至第二页查看')  # 第0行第0列写入内容
     # sheet1.write(1, 0, '确认数量正确、内容正确后，可将此文件直接导入iWork系统', style1)  # 第1行第0列写入内容
 
-    for product in testcases_dict:
+    for product in testsutie_dict:
 
         sheet2 = workbook.add_worksheet(product) #sheet名
         sheet2.set_column("A:F", 30)
@@ -48,12 +48,12 @@ def xmind_to_qqtestcase_file(xmind_file):
         sheet2.write(0, 2, fileheader[2])
         sheet2.write(0, 3, fileheader[3])
         sheet2.write(0, 4, fileheader[4])
-        sheet2.write(0, 4, fileheader[5])
+        sheet2.write(0, 5, fileheader[5])
 
         #第二行开始写入用例
         case_index = 1
         case_no = 0
-        for testcase in testcases_dict[product]:
+        for testcase in testsutie_dict[product]:
             row_list = gen_a_testcase_row_list(testcase)
             for row in row_list:
                 if len(row[1]) > 0:
@@ -74,19 +74,6 @@ def xmind_to_qqtestcase_file(xmind_file):
     logging.info('Convert XMind file(%s) to a qqtestcase file(%s) successfully!', xmind_file, qqtestcase_file)
 
     return qqtestcase_file
-
-
-def gen_a_testcase_row(testcase_dict):
-    case_module = gen_case_module(testcase_dict['suite'])
-    case_title = testcase_dict['name']
-    case_precontion = testcase_dict['preconditions']
-    case_step, case_expected_result = gen_case_step_and_expected_result(testcase_dict['steps'])
-    case_keyword = '功能测试'
-    case_priority = gen_case_priority(testcase_dict['importance'])
-    case_type = gen_case_type(testcase_dict['execution_type'])
-    case_apply_phase = '迭代测试'
-    row = [case_module, case_title, case_precontion, case_step, case_expected_result, case_keyword, case_priority, case_type, case_apply_phase]
-    return row
 
 #qqtestcase
 def gen_a_testcase_row_list(testcase_dict):

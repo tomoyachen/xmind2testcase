@@ -161,10 +161,13 @@ def parse_a_testcase(case_dict, parent):
     return testcase
 
 
+#优先级在这里
 def get_priority(case_dict):
     """Get the topic's priority（equivalent to the importance of the testcase)"""
+    # print("case_dict['markers']", case_dict['markers'])
     if isinstance(case_dict['markers'], list):
         for marker in case_dict['markers']:
+            # print("maker", marker)
             if marker.startswith('priority'):
                 return int(marker[-1])
 

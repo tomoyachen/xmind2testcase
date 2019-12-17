@@ -96,7 +96,6 @@ def get_xmind_testcase_list(xmind_file):
                 case_data['product'] = product
                 case_data['suite'] = suite.name
                 testcases.append(case_data)
-        print(suite.testcase_list[0].to_dict())
 
     logging.info('Convert XMind file(%s) to testcases dict data successfully!', xmind_file)
     return testcases
@@ -123,7 +122,6 @@ def get_xmind_testcase_list2(xmind_file):
                 testcases_dict[product].append(case_data)
 
     logging.info('Convert XMind file(%s) to testcases dict data successfully!', xmind_file)
-    print(testcases_dict)
     return testcases_dict
 
 def xmind_testsuite_to_json_file(xmind_file):
