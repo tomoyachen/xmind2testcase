@@ -100,7 +100,7 @@ def get_xmind_testcase_list(xmind_file):
     logging.info('Convert XMind file(%s) to testcases dict data successfully!', xmind_file)
     return testcases
 
-def get_xmind_testcase_list2(xmind_file):
+def get_xmind_testcase_list_dict(xmind_file):
     """Load the XMind file and get all testcase in it
 
     :param xmind_file: the target XMind file

@@ -4,7 +4,7 @@
 import xlsxwriter
 import logging
 import os
-from xmind2testcase.utils import get_xmind_testcase_list2, get_absolute_path
+from xmind2testcase.utils import get_xmind_testcase_list_dict, get_absolute_path
 
 
 """
@@ -16,7 +16,7 @@ def xmind_to_qqtestcase_file(xmind_file):
     """Convert XMind file to a qqtestcase file"""
     xmind_file = get_absolute_path(xmind_file)
     logging.info('Start converting XMind file(%s) to qqtestcase file...', xmind_file)
-    testsutie_dict = get_xmind_testcase_list2(xmind_file)
+    testsutie_dict = get_xmind_testcase_list_dict(xmind_file)
 
 
 
@@ -43,7 +43,7 @@ def xmind_to_qqtestcase_file(xmind_file):
         smoke_case_dict[product] = []
 
         sheet = workbook.add_worksheet(product) #sheet名
-        sheet.set_column("A:B", 20)
+        sheet.set_column("A:B", 15)
         sheet.set_column("C:F", 30)
 
         # 用例title
@@ -92,13 +92,13 @@ def xmind_to_qqtestcase_file(xmind_file):
 
             if len(smoke_case) > 0:
                 smoke_case_dict[product].append(smoke_case)
-    print(smoke_case_dict)
+    # print(smoke_case_dict)
 
     #写入冒烟测试
     #############
     if len(smoke_case_dict) > 0:
         sheet2 = workbook.add_worksheet("冒烟用例")  # sheet名
-        sheet2.set_column("A:A", 20)
+        sheet2.set_column("A:A", 15)
         sheet2.set_column("B:B", 80)
 
         _case_index = 0
